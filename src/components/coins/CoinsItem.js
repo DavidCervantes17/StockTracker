@@ -1,5 +1,5 @@
 import  React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native'
+import {View, Text, StyleSheet, Image, Platform} from 'react-native'
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const CoinsItem = ({item}) => {
@@ -36,7 +36,8 @@ const styles = StyleSheet.create({
         padding:16,
         justifyContent: "space-between",
         borderBottomColor:Colors.zircon,
-        borderBottomWidth:1
+        borderBottomWidth:1,
+        marginLeft: Platform.OS == 'ios' ? 16 : 0
     },
     row:{
         flexDirection:"row"
