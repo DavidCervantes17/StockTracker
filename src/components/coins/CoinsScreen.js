@@ -2,6 +2,7 @@ import  React, {Component } from 'react';
 import {View, Text, Pressable, StyleSheet, FlatList, ActivityIndicator} from 'react-native'
 import Http from '../../libs/http'
 import CoinsItem from './CoinsItem'
+import Colors from '../../res/color'
 
 class CoinsScreen extends Component {
 
@@ -49,7 +50,7 @@ export default CoinsScreen
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:"#fff"
+        backgroundColor:Colors.charade
     },
     tittleText:{
         color:"#fff",

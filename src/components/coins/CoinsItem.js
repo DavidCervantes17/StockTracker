@@ -1,13 +1,69 @@
 import  React from 'react';
-import {View, Text, StyleSheet} from 'react-native'
+import {View, Text, StyleSheet, Image} from 'react-native'
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const CoinsItem = ({item}) => {
+    
+    getImgArrow = () => {
+        if(item.percent_change_1h > 0){
+            return require('../../assets/arrow_up.png')
+        }else{
+            return require('../../assets/arrow_down.png')
+
+        }
+    }
     return(
-        <View>
-            <Text> {item.name} </Text>
-            <Text> {item.symbol} </Text>
+        <View style={styles.container}>
+            <View style={styles.row}>
+                <Text style={styles.symbolText}> {item.symbol} </Text>
+                <Text style={styles.nameText}> {item.name} </Text>
+                <Text style={styles.priceText}> ${item.price_usd} </Text>
+            </View>
+            <View style={styles.row}>
+                <Text style={styles.percentText}> {item.percent_change_1h} </Text>
+                <Image
+                    source={getImgArrow()}
+                    style={styles.imgIcon}
+                />
+            </View>
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container:{
+        flexDirection:'row',
+        padding:16,
+        justifyContent: "space-between",
+        borderBottomColor:Colors.zircon,
+        borderBottomWidth:1
+    },
+    row:{
+        flexDirection:"row"
+    },
+    symbolText:{
+        color:"#fff",
+        fontWeight:"bold",
+        fontSize:16,
+        marginRight:12
+    },
+    nameText:{
+        color:"#fff",
+        fontSize:14
+    },
+    percentText:{
+        color:"#fff",
+        fontSize:12
+    },
+    priceText:{
+        color:"#fff",
+        fontSize:14,
+        marginRight:12
+    },
+    imgIcon:{
+        width:22,
+        height:22
+    }
+})
 
 export default CoinsItem;
