@@ -1,5 +1,5 @@
 import  React, {Component } from 'react';
-import {View, Image, Text, StyleSheet, SectionList,Pressable} from 'react-native'
+import {View, Image, Text, StyleSheet, SectionList, Pressable, Alert} from 'react-native'
 import Colors from '../../res/color'
 import Http from '../../libs/http'
 import CoinMarketItem from '../coinDetail/CoinMarketItem'
@@ -23,18 +23,62 @@ class CoinDetailScreen extends Component {
       }
     }
 
-    addFavorite = () => {
+    addFavorite = async () => {
       const coin = JSON.stringify(this.state.coin)
       const key = `favorite-${this.state.coin.id}`
 
-      const stored = Storage.instance.store(key,coin)
+      const stored = await Storage.instance.store(key,coin)
+
+      console.log("stored",stored)
 
       if(stored){
         this.setState({isFavorite:true})
       }
     }
-    removeFavorite = () => {
+    removeFavorite = async() => {
 
+      Alert.alert("Eliminar de favoritos", "¿Estas seguro?",[{
+        text:'Cancelar',
+        onPress: () => {},
+        style:"cancel"
+      },
+      {
+        text:'Eliminar ',
+        onPress: async () => {
+          const key = `favorite-${this.state.coin.id}`
+
+          const stored = await Storage.instance.remove(key)
+    
+          console.log("remove",stored)
+    
+          if(stored){
+            this.setState({isFavorite:false})
+          }
+        },
+        style:"destructive"
+      }
+    ])
+      
+
+    }
+    getFavorite = async () => {
+      try {
+        const key = `favorite-${this.state.coin.id}`
+        const favStr = await Storage.instance.get(key)
+        console.log("getFavorite",favStr)
+
+        if(favStr != null){
+          this.setState({isFavorite:true})
+        }
+      } catch (error) {
+        console.log("get favorite error",error)
+      }
+
+
+
+      if(stored){
+        this.setState({isFavorite:true})
+      }
     }
     getSymbolIcon = (name) => {
         if (name) {
@@ -75,7 +119,10 @@ class CoinDetailScreen extends Component {
         const {coin} = this.props.route.params;
         this.props.navigation.setOptions({title: coin.symbol})
         this.getMarkets(coin.id)
-        this.setState({coin})
+        //Como se asincrono se tiene que hacer de esta forma, despues de que estado de coin se seteo, con el callback de this.setState
+        this.setState({coin},() => {
+          this.getFavorite()
+        })
     } 
 
     render(){
